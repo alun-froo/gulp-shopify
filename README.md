@@ -1,4 +1,14 @@
-# Gulp + Shopify
+# FrooTheme Git
+
+Version: 1.2
+
+## Author 
+
+A.Widdowson
+
+
+
+# Original Gulp + Shopify
 
 Version: 1.0.5
 
