@@ -6,6 +6,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
 const rename = require("gulp-rename");
+const replace = require("gulp-replace");
 const sass = require('gulp-sass');
 const uglify = require('gulp-uglify');
 const scsslint = require('gulp-scss-lint');
@@ -13,7 +14,7 @@ const scsslint = require('gulp-scss-lint');
 /**
  * Asset paths.
  */
-const scssSrc = 'scss/**/*.scss';
+const scssSrc = './scss/**/*.scss';
 const jsSrc = 'js/*.js';
 const assetsDir = '../assets/';
 
@@ -28,12 +29,19 @@ gulp.task('scss-lint', function() {
 /**
  * SCSS task
  */
-gulp.task('css', ['scss-lint'], function () {
-    return gulp.src('scss/**/*.scss.liquid')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer({ cascade : false }))
-        .pipe(rename('theme.scss.liquid'))
-        .pipe(gulp.dest(assetsDir));
+gulp.task('css', function () {
+    return (
+        gulp
+            .src('scss/**/*.scss.liquid')
+            .pipe(sass().on('error', sass.logError))
+            .pipe(autoprefixer({ cascade : false }))
+            .pipe(rename('theme.css.liquid'))
+            .pipe(replace('"{{', "{{"))
+            .pipe(replace('}}"', "}}"))
+            .pipe(replace('/*', ""))
+            .pipe(replace('*/', ""))
+            .pipe(gulp.dest(assetsDir))
+    );
 });
 
 /**
@@ -91,5 +99,10 @@ gulp.task('watch', function () {
 
 /**
  * Default task
- */
+
 gulp.task('default', ['css', 'js', 'images', 'fonts'] );
+*/
+
+gulp.task("default", function () {
+  gulp.watch(['scss/**/*.scss'], gulp.series(["css"])); 
+});
